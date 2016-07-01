@@ -28,9 +28,9 @@ function! OpenVim(mode)
     endif
 endfunction
 " open in full-feature gvim
-nnoremap <silent> <leader>v: call OpenVim("full")<CR>
+nnoremap <silent> <leader>v :call OpenVim("full")<CR>
 " open in light gvim
-nnoremap <silent> <leader>V: call OpenVim("light")<CR>
+nnoremap <silent> <leader>V :call OpenVim("light")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
 "=============================================================================
@@ -278,10 +278,10 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     set guitablabel=[%N]\ %m%t
     " color theme
     if has("gui_running")
-        if has("$my_vim_full")
+        if exists("$my_vim_full")
             set background=dark
             colorscheme solarized
-        elseif has("$my_vim_light")
+        elseif exists("$my_vim_light")
             set background=light
             colorscheme PaperColor
         else
@@ -465,7 +465,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
                 \]
     " "airline"
     set laststatus=2
-    "set t_Co=256
+    set t_Co=256
     let g:airline#extensions#whitespace#enabled = 0
     if !exists('g:airline_symbols')
         let g:airline_symbols={}
