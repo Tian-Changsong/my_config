@@ -578,5 +578,9 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
 
     " For perlomni.vim setting.
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    let g:neocomplete#data_directory=$USERPROFILE."/.cache/neocomplete"
+    if has("win32")
+        let g:neocomplete#data_directory=$USERPROFILE."/.cache/neocomplete"
+    else
+        let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
+    endif
 endif
