@@ -3,14 +3,12 @@
 "=============================================================================
 " be iMproved, required
 set nocompatible
+" required by vundle
+filetype off
 " set search highlight
 set hlsearch
 " set mapleader
 let mapleader=","
-" turn on filetype detection, ftplugin, indent
-filetype plugin indent on
-" enable syntax highlight
-syntax on
 " set backspace
 set backspace=indent,eol,start
 function! OpenVim(mode)
@@ -42,7 +40,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     "==================
     if has("win32")
         set rtp+=$vim/vimfiles/bundle/Vundle.vim
-        call vundle#begin("$vim/vimfiles/bundle")
+        call vundle#begin($vim."/vimfiles/bundle")
     else
         set rtp+=~/.vim/bundle/Vundle.vim
         call vundle#begin()
@@ -58,8 +56,9 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'Raimondi/delimitMate'
     Plugin 'Shougo/neocomplete.vim'
     Plugin 'godlygeek/tabular'
+    Plugin 'tpope/vim-surround'
     Plugin 'SirVer/ultisnips'
-    Plugin 'honza/vim-snippets'
+    Plugin 'honza/vim-snippets' " requred by ultisnips
     Plugin 'hdima/python-syntax'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
@@ -75,6 +74,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         Plugin 'scrooloose/syntastic'
     endif
     call vundle#end()
+    " turn on filetype detection, ftplugin, indent
+    filetype plugin indent on
     "================
     "  key mapping  "
     "================
@@ -162,8 +163,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         endif
     endfunction
     nnoremap <silent> <leader>x :call MakeExecutable()<CR>
-    " open snippets
-    nnoremap <leader>es :UltiSnipsEdit<CR>
     " toggle show menu bar
     map <silent> <F2> :if &guioptions =~# 'm' <Bar> set guioptions-=m <Bar> else <Bar> set guioptions+=m <Bar> endif <CR>
     " open configuration file with short key
@@ -316,6 +315,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     set splitright
     " no horizontally split window is below old
     set splitbelow
+    " enable syntax highlight
+    syntax on
     " set fileformats
     set fileformats=unix,dos
     " set tab width
@@ -391,9 +392,14 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
 
     " "ultisnips"
     let g:UltiSnipsExpandTrigger="<c-j>"
+    " open snippets
+    nnoremap <leader>es :UltiSnipsEdit<CR>
     let g:Perl_Ctrl_j = 'off'
-    let g:UltisnipsSnippetsDir="~/.vim/my_snippets"
-    let g:UltiSnipsSnippetDirectories=["UltiSnips","my_snippets"]
+    if has("win32")
+        let g:UltiSnipsSnippetDirectories=[$vim.'/vimfiles/my_snippets']
+    else
+        let g:UltiSnipsSnippetDirectories=[$HOME."/.vim/my_snippets"]
+    endif
 
     " "showmarks"
     let g:showmarks_enable = 1
@@ -411,58 +417,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     map <leader>r :FufMruFile<CR>
     map <leader>R :FufRenewCache<CR>
     map <leader>b :FufBuffer<CR>
-    nnoremap <silent> <leader>M :call fuf#givencmd#launch('', 0, 'Choose command>', GetAllCommands())<CR>
-    nnoremap <silent> <leader>m :call fuf#givencmd#launch('', 0, 'Choose command>', g:fuf_com_list)<CR>
-    function! GetAllCommands()
-        redir => commands
-        silent command
-        redir END
-        return map((split(commands, "\n")[3:]),
-                    \      '":" . matchstr(v:val, ''^....\zs\S*'')')
-    endfunction
-    let g:fuf_com_list=[':exe "FufBuffer                       " |" 1 ',
-                \':exe "FufFileWithCurrentBufferDir     " |" 2 ',
-                \':exe "FufFileWithFullCwd              " |" 3 ',
-                \':exe "FufFile                         " |" 4 ',
-                \':exe "FufCoverageFileChange           " |" 5 ',
-                \':exe "FufCoverageFileChange           " |" 6 ',
-                \':exe "FufCoverageFileRegister         " |" 7 ',
-                \':exe "FufDirWithCurrentBufferDir      " |" 8 ',
-                \':exe "FufDirWithFullCwd               " |" 9 ',
-                \':exe "FufDir                          " |" 10',
-                \':exe "FufMruFile                      " |" 11',
-                \':exe "FufMruFileInCwd                 " |" 12',
-                \':exe "FufMruCmd                       " |" 13',
-                \':exe "FufBookmarkFile                 " |" 14',
-                \':exe "FufBookmarkFileAdd              " |" 15',
-                \':exe "FufBookmarkFileAddAsSelectedText" |" 16',
-                \':exe "FufBookmarkDir                  " |" 17',
-                \':exe "FufBookmarkDirAdd               " |" 18',
-                \':exe "FufTag                          " |" 19',
-                \':exe "FufTag!                         " |" 20',
-                \':exe "FufTagWithCursorWord!           " |" 21',
-                \':exe "FufBufferTag                    " |" 22',
-                \':exe "FufBufferTag!                   " |" 23',
-                \':exe "FufBufferTagWithSelectedText!   " |" 24',
-                \':exe "FufBufferTagWithSelectedText    " |" 25',
-                \':exe "FufBufferTagWithCursorWord!     " |" 26',
-                \':exe "FufBufferTagAll                 " |" 27',
-                \':exe "FufBufferTagAll!                " |" 28',
-                \':exe "FufBufferTagAllWithSelectedText!" |" 29',
-                \':exe "FufBufferTagAllWithSelectedText " |" 30',
-                \':exe "FufBufferTagAllWithCursorWord!  " |" 31',
-                \':exe "FufTaggedFile                   " |" 32',
-                \':exe "FufTaggedFile!                  " |" 33',
-                \':exe "FufJumpList                     " |" 34',
-                \':exe "FufChangeList                   " |" 35',
-                \':exe "FufQuickfix                     " |" 36',
-                \':exe "FufLine                         " |" 37',
-                \':exe "FufHelp                         " |" 38',
-                \':exe "FufEditDataFile                 " |" 39',
-                \':exe "FufRenewCache                   " |" 40',
-                \':exe "FufDir ~/"                        |" 41',
-                \':exe "FufFile ~/"                       |" 42',
-                \]
+
     " "airline"
     set laststatus=2
     set t_Co=256
