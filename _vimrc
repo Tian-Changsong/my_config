@@ -220,8 +220,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         call AdjustFontSize(-1)
     endfunction
     command! SmallerFont call SmallerFont()
-    map <c-Up> :call AdjustFontSize(1)<CR>
-    map <c-Down> :call AdjustFontSize(-1)<CR>
+    map <silent><c-Up> :call AdjustFontSize(1)<CR>
+    map <silent><c-Down> :call AdjustFontSize(-1)<CR>
 
     function! ToggleFont(mode)
         if a:mode=="shrink"
