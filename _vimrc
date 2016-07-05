@@ -57,6 +57,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'Shougo/neocomplete.vim'
     Plugin 'godlygeek/tabular'
     Plugin 'tpope/vim-surround'
+    Plugin 'Tian-Changsong/tcl_vim_indent'
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets' " requred by ultisnips
     Plugin 'hdima/python-syntax'
@@ -185,6 +186,43 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
     " force quit
     nnoremap <leader>q :q!<CR>
+    let s:minfontsize = 6
+    let s:maxfontsize = 18
+    if has("win32")
+        let s:pattern = '^\(.*:h\)\([0-9]\+\)'
+    else
+        let s:pattern = '^\(.* \)\([0-9]\+\)$'
+    endif
+    function! AdjustFontSize(amount)
+        if has("gui_running")
+            let fontname = substitute(&guifont, s:pattern, '\1', '')
+            let cursize = substitute(&guifont, s:pattern, '\2', '')
+            let newsize = cursize + a:amount
+            let newfont = fontname . newsize
+            echohl MoreMsg
+            if (newsize < s:minfontsize)
+                echo "Font size cannot be less than " . s:minfontsize . " !"
+            elseif (newsize > s:maxfontsize)
+                echo "Font size cannot be greater than " . s:maxfontsize . " !"
+            else
+                let &guifont = newfont | redraw | echo "Font changed to '" . newfont ."'"
+            endif
+            echohl None
+        endif
+    endfunction
+
+    function! LargerFont()
+        call AdjustFontSize(1)
+    endfunction
+    command! LargerFont call LargerFont()
+
+    function! SmallerFont()
+        call AdjustFontSize(-1)
+    endfunction
+    command! SmallerFont call SmallerFont()
+    map <c-Up> :call AdjustFontSize(1)<CR>
+    map <c-Down> :call AdjustFontSize(-1)<CR>
+
     function! ToggleFont(mode)
         if a:mode=="shrink"
             if has("win32")
