@@ -333,7 +333,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         set guifont=DejaVu_Sans_Mono_for_Powerline:h12
         set guifontwide=DejaVu_Sans_Mono_for_Powerline:h12
     elseif has("unix")
-        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+        "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+        set guifont=Monaco\ for\ Powerline\ 12
         set guifontwide=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
     endif
     " set encoding
@@ -463,7 +464,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     if !exists('g:airline_symbols')
         let g:airline_symbols={}
     endif
-    let g:airline_symbols.maxlinenr = ''
+    "let g:airline_symbols.maxlinenr = ''
     let g:airline_powerline_fonts=1
 
     let g:airline#extensions#tabline#enabled = 1
@@ -576,4 +577,10 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     else
         let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
     endif
+else
+    "=========================================================================
+    "                             common setting                             "
+    "=========================================================================
+    " enable syntax highlight
+    syntax on
 endif
