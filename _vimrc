@@ -303,6 +303,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     set linespace=1
     " don't ring error bell
     set noerrorbells
+    " set mouse working like in xterm
+    set mousemodel=extend
     " history length
     set history=50
     " show command just excuted
@@ -420,6 +422,17 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     au Filetype python set formatprg=autopep8\ -
     au Filetype perl set formatprg=perltidy
 
+    " capture ex command message
+    function! BufMessage(cmd)
+        redir => message
+        silent execute a:cmd
+        redir END
+        edit exMessage
+        silent put=message
+        set nomodified
+    endfunction
+    command! -nargs=+ -complete=command BufMessage call BufMessage(<q-args>)
+
     "====================
     "  plugin settings  "
     "====================
@@ -464,7 +477,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     if !exists('g:airline_symbols')
         let g:airline_symbols={}
     endif
-    "let g:airline_symbols.maxlinenr = ''
+    let g:airline_symbols.maxlinenr = ''
     let g:airline_powerline_fonts=1
 
     let g:airline#extensions#tabline#enabled = 1
