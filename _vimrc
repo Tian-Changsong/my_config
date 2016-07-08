@@ -540,6 +540,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     let g:neocomplete#enable_at_startup = 1
     " Use smartcase.
     let g:neocomplete#enable_smart_case = 1
+    " auto close preview
+    let g:neocomplete#enable_auto_close_preview = 1
     " Set minimum syntax keyword length.
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
@@ -569,10 +571,10 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         "return pumvisible() ? "\<C-y>" : "\<CR>"
     endfunction
     " <TAB>: completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+    "inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+    "inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
     " Enable omni completion.
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
