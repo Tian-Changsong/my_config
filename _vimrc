@@ -58,8 +58,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'godlygeek/tabular'
     Plugin 'tpope/vim-surround'
     Plugin 'Tian-Changsong/tcl_vim_indent'
-    Plugin 'SirVer/ultisnips'
-    Plugin 'honza/vim-snippets' " requred by ultisnips
     Plugin 'hdima/python-syntax'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
@@ -71,6 +69,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'michalbachowski/vim-wombat256mod'
     if has("unix") && exists("$my_vim_full") || has("win32") || has("macunix")
         Plugin 'Yggdroot/indentLine'
+        Plugin 'SirVer/ultisnips'
+        Plugin 'honza/vim-snippets' " requred by ultisnips
         "Plugin 'Valloric/YouCompleteMe'
         Plugin 'scrooloose/syntastic'
     endif
