@@ -188,7 +188,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     nnoremap <leader>q :q!<CR>
     let s:minfontsize = 6
     let s:maxfontsize = 18
-    if has("win32")
+    if has("win32") || has("macunix")
         let s:pattern = '^\(.*:h\)\([0-9]\+\)'
     else
         let s:pattern = '^\(.* \)\([0-9]\+\)$'
@@ -334,6 +334,9 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     if has("win32")
         set guifont=DejaVu_Sans_Mono_for_Powerline:h12
         set guifontwide=DejaVu_Sans_Mono_for_Powerline:h12
+    elseif has("macunix")
+        set guifont=Monaco\ for\ Powerline:h13
+        set guifontwide=Monaco\ for\ Powerline:h13
     elseif has("unix")
         "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
         set guifont=Monaco\ for\ Powerline\ 12
