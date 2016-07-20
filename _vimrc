@@ -309,6 +309,10 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     set history=50
     " show command just excuted
     set showcmd
+    " use system clipboard when pressing y in Windows
+    if has("win32")
+        set clipboard=unnamed
+    endif
     " show completion for commands
     set wildmenu
     " ignore case when searching
