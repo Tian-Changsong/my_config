@@ -59,6 +59,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'tpope/vim-surround'
     Plugin 'Tian-Changsong/tcl_vim_indent'
     Plugin 'hdima/python-syntax'
+    Plugin 'davidhalter/jedi-vim'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     "Plugin 'kien/ctrlp.vim'
@@ -342,8 +343,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         set guifont=Monaco\ for\ Powerline:h13
         set guifontwide=Monaco\ for\ Powerline:h13
     elseif has("unix")
-        "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
-        set guifont=Monaco\ for\ Powerline\ 12
+        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+        "set guifont=Monaco\ for\ Powerline\ 12
         set guifontwide=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
     endif
     " set encoding
@@ -599,6 +600,16 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     else
         let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
     endif
+
+    " "jedi-vim"
+    autocmd FileType python setlocal omnifunc=jedi#completions
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 else
     "=========================================================================
     "                             common setting                             "
