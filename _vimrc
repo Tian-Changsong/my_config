@@ -54,8 +54,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'ShowMarks'
     Plugin 'Raimondi/delimitMate'
     Plugin 'Shougo/neocomplete.vim'
-    Plugin 'Shougo/unite.vim'
-    Plugin 'Shougo/neomru.vim'
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'godlygeek/tabular'
     Plugin 'tpope/vim-surround'
@@ -378,7 +376,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     " set max tab number
     set tabpagemax=20
     " set current file's path as pwd
-    set autochdir
+    "set autochdir
     " set current line highlight
     if has("gui_running")
         set cursorline
@@ -468,16 +466,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     let showmarks_hlline_lower = 1
     let showmarks_hlline_upper = 0
 
-    " "fuzzyfinder"
-    let g:fuf_modesDisable = []
-    let g:fuf_mrufile_maxItem = 400
-    let g:fuf_mrucmd_maxItem = 400
-    map <leader>F :FufFile<CR>
-    map <leader>f :FufFileWithFullCwd<CR>
-    map <leader>r :FufMruFile<CR>
-    map <leader>R :FufRenewCache<CR>
-    map <leader>b :FufBuffer<CR>
-
     " "airline"
     set laststatus=2
     set t_Co=256
@@ -521,6 +509,9 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     " "ctrlp"
     let g:ctrlp_show_hidden=1
     let g:ctrlp_working_path_mode = 'c'
+    map <silent> <leader>b :CtrlPBuffer<CR>
+    map <silent> <leader>r :CtrlPMRUFiles<CR>
+    map <silent> <leader>f :CtrlPCurWD<CR>
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 
     " "vim-viewdoc"
@@ -610,123 +601,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         let g:neocomplete#force_omni_input_patterns = {}
     endif
     let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
-    " "unite"
-      "call unite#filters#matcher_default#use(['matcher_fuzzy'])
-      "call unite#custom#profile('default', 'context', { 'start_insert': 1 })
-
-    "function! s:unite_settings()
-        "nmap <buffer> Q <plug>(unite_exit)
-        "nmap <buffer> <esc> <plug>(unite_exit)
-        "imap <buffer> <esc> <plug>(unite_exit)
-    "endfunction
-    "autocmd FileType unite call s:unite_settings()
-
-    "call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    "nnoremap <leader>r :<C-u>Unite -start-insert file_rec<CR>
-    "nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec:! buffer file_mru bookmark<cr><c-u>
-    "nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec:!<cr><c-u>
-    "nnoremap <silent> [unite]e :<C-u>Unite -buffer-name=recent file_mru<cr>
-    "nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
-    "nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer file_mru<cr>
-    "nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-    "nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
-    "nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-
-
-    let g:unite_source_history_yank_enable = 1
-    call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    call unite#filters#sorter_default#use(['sorter_rank'])
-    nnoremap <leader>t :<C-u>Unite -toggle -auto-resize -buffer-name=files   -start-insert file_rec/async:!<cr>
-    nnoremap <leader>f :<C-u>Unite -toggle -auto-resize -buffer-name=files   -start-insert file<cr>
-    nnoremap <leader>r :<C-u>Unite -toggle -auto-resize -buffer-name=mru     -start-insert file_mru<cr>
-    nnoremap <leader>y :<C-u>Unite -toggle -auto-resize -buffer-name=yank    history/yank<cr>
-    nnoremap <leader>e :<C-u>Unite -toggle -auto-resize -buffer-name=buffer  buffer<cr>
-
-    " Custom mappings for the unite buffer
-    autocmd FileType unite call s:unite_settings()
-    function! s:unite_settings()
-        " Play nice with supertab
-        let b:SuperTabDisabled=1
-        " Enable navigation with control-j and control-k in insert mode
-        imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-        imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-    endfunction
-
-
-	nnoremap    [unite]   <Nop>
-	nmap    f [unite]
-
-	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir
-	        \ -buffer-name=files buffer bookmark file<CR>
-	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-	        \ -buffer-name=files buffer bookmark file<CR>
-	nnoremap <silent> [unite]r  :<C-u>Unite
-	        \ -buffer-name=register register<CR>
-	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
-	nnoremap <silent> [unite]f
-	        \ :<C-u>Unite -buffer-name=resume resume<CR>
-	nnoremap <silent> [unite]ma
-	        \ :<C-u>Unite mapping<CR>
-	nnoremap <silent> [unite]me
-	        \ :<C-u>Unite output:message<CR>
-	nnoremap  [unite]f  :<C-u>Unite source<CR>
-
-	nnoremap <silent> [unite]s
-	        \ :<C-u>Unite -buffer-name=files -no-split
-	        \ jump_point file_point buffer_tab
-	        \ file_rec:! file file/new<CR>
-
-	" Start insert.
-	"call unite#custom#profile('default', 'context', {
-	"\   'start_insert': 1
-	"\ })
-
-	" Like ctrlp.vim settings.
-	"call unite#custom#profile('default', 'context', {
-	"\   'start_insert': 1,
-	"\   'winheight': 10,
-	"\   'direction': 'botright',
-	"\ })
-
-	autocmd FileType unite call s:unite_my_settings()
-	function! s:unite_my_settings()"{{{
-	  " Overwrite settings.
-
-	  imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-	  imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-	  imap <buffer> '     <Plug>(unite_quick_match_default_action)
-	  nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-	  imap <buffer><expr> x
-	          \ unite#smart_map('x', "\<Plug>(unite_quick_match_jump)")
-	  nmap <buffer> x     <Plug>(unite_quick_match_jump)
-	  nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	  imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	  nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-	  nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	  imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	  nnoremap <silent><buffer><expr> l
-	          \ unite#smart_map('l', unite#do_action('default'))
-
-	  let unite = unite#get_current_unite()
-	  if unite.profile_name ==# 'search'
-	    nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-	  else
-	    nnoremap <silent><buffer><expr> r     unite#do_action('rename')
-	  endif
-
-	  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-	  nnoremap <buffer><expr> S      unite#mappings#set_current_sorters(
-	          \ empty(unite#mappings#get_current_sorters()) ?
-	          \ ['sorter_reverse'] : [])
-
-	  " Runs "split" action by <C-s>.
-	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
-	endfunction"}}}
-
-
-
-
 else
     "=========================================================================
     "                             common setting                             "
