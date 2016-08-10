@@ -508,10 +508,12 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
 
     " "ctrlp"
     let g:ctrlp_show_hidden=1
-    let g:ctrlp_working_path_mode = 'c'
+    let g:ctrlp_working_path_mode = 'w'
+    let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
     map <silent> <leader>b :CtrlPBuffer<CR>
     map <silent> <leader>r :CtrlPMRUFiles<CR>
-    map <silent> <leader>f :CtrlPCurWD<CR>
+    map <silent> <leader>f :CtrlPCurFile<CR>
+    map <silent> <leader>l :CtrlPLine<CR>
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 
     " "vim-viewdoc"
