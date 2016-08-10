@@ -512,7 +512,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     let g:ctrlp_working_path_mode = 'w'
     let g:ctrlp_clear_cache_on_exit = 0
     " Set delay to prevent extra search
-    let g:ctrlp_lazy_update = 350
+    let g:ctrlp_lazy_update = 150
     let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
     let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
     map <silent> <leader>b :CtrlPBuffer<CR>
