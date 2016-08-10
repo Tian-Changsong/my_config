@@ -532,8 +532,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     nnoremap <leader>i :IndentLinesToggle<CR>
 
     " "neocomplete"
-    " Disable AutoComplPop.
-    let g:acp_enableAtStartup = 0
     " Use neocomplete.
     let g:neocomplete#enable_at_startup = 1
     " Use smartcase.
@@ -568,11 +566,6 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         " For no inserting <CR> key.
         "return pumvisible() ? "\<C-y>" : "\<CR>"
     endfunction
-    " <TAB>: completion.
-    "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    "inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    "inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
     " Enable omni completion.
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
