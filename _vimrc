@@ -49,6 +49,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     Plugin 'scrooloose/nerdcommenter'
     Plugin 'SingleCompile'
     Plugin 'matchit.zip'
+    Plugin 'othree/html5.vim'
     Plugin 'altercation/vim-colors-solarized'
     Plugin 'NLKNguyen/papercolor-theme'
     Plugin 'ShowMarks'
