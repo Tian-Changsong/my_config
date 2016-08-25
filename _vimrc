@@ -85,10 +85,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         " set CTRL+s to save if gvim
         inoremap <C-s> <esc>:w<CR>a
         nnoremap <C-s> :w<CR>
-        " set CTRL+c to copy in system's clipboard
+        " set CTRL+c to copy in system's clipboard, use shift+insert to paste
         vmap <C-c> "+y
-        " set CTRL+v to paste from system's clipboard
-        inoremap <C-v> <C-r>+
     endif
     " buffer swap
     nnoremap <s-h> :bp<CR>
