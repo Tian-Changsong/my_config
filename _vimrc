@@ -12,12 +12,11 @@ let mapleader=","
 " set backspace
 set backspace=indent,eol,start
 function! OpenVim(mode)
-    if a:mode=="full"
-        echo "Switching to full-feature gvim ..."
-        silent exe "!unsetenv my_vim_light; setenv my_vim_full;gvim ".expand('%:p')
-    elseif a:mode=="light"
-        echo "Switching to light-feature gvim ..."
-        silent exe "!unsetenv my_vim_full; setenv my_vim_light;gvim ".expand('%:p')
+    echo "Switching to " . a:mode . "-feature gvim ..."
+    if $SHELL =~ ".*zsh$" || $SHELL =~ ".*bash$"
+        silent exe "!export VIM_MODE=" . a:mode . ";gvim ".expand('%:p')
+    elseif $SHELL =~ ".*csh$"
+        silent exe "!setenv VIM_MODE " . a:mode . ";gvim ".expand('%:p')
     endif
     if len(filter(range(1,bufnr('$')),'buflisted(v:val)'))=="1"
         silent exe "quit"
@@ -34,7 +33,7 @@ nnoremap <leader>q :q!<CR>
 "=============================================================================
 "                      full & light-feature vim config                       "
 "=============================================================================
-if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("win32") || has("macunix")
+if has("unix") && exists("$VIM_MODE") || has("win32") || has("macunix")
     "==================
     "  vundle plugin  "
     "==================
@@ -68,7 +67,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
         Plugin 'powerman/vim-plugin-viewdoc'
     endif
     Plugin 'michalbachowski/vim-wombat256mod'
-    if has("unix") && exists("$my_vim_full") || has("win32") || has("macunix")
+    if has("unix") && $VIM_MODE == "full" || has("win32") || has("macunix")
         Plugin 'Yggdroot/indentLine'
         Plugin 'SirVer/ultisnips'
         Plugin 'honza/vim-snippets' " requred by ultisnips
@@ -320,10 +319,10 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     set guitablabel=[%N]\ %m%t
     " color theme
     if has("gui_running")
-        if exists("$my_vim_full")
+        if $VIM_MODE == "full"
             set background=dark
             colorscheme solarized
-        elseif exists("$my_vim_light")
+        elseif $VIM_MODE == "light"
             set background=light
             colorscheme PaperColor
         else
@@ -510,6 +509,7 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     let g:ctrlp_show_hidden=1
     let g:ctrlp_working_path_mode = 'w'
     let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_extensions = ['dir']
     " Set delay to prevent extra search
     let g:ctrlp_lazy_update = 150
     let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
@@ -518,7 +518,8 @@ if has("unix") && (exists("$my_vim_full") || exists("$my_vim_light")) || has("wi
     map <silent> <leader>r :CtrlPMRUFiles<CR>
     map <silent> <leader>f :CtrlPCurFile<CR>
     map <silent> <leader>l :CtrlPLine<CR>
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
+    map <silent> <leader>d :CtrlPDir<CR>
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/run_details/*
     " If ag is available use it as filename list generator instead of 'find'
     if executable("ag")
         set grepprg=ag\ --nogroup\ --nocolor
