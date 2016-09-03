@@ -524,6 +524,9 @@ if has("unix") && exists("$VIM_MODE") || has("win32") || has("macunix")
     if executable("ag")
         set grepprg=ag\ --nogroup\ --nocolor
         let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
+    elseif executable("pt")
+        set grepprg=pt\ --nogroup\ --nocolor
+        let g:ctrlp_user_command = 'pt %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
     endif
 
     " "vim-viewdoc"
