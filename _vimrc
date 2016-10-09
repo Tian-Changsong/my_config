@@ -11,12 +11,18 @@ set hlsearch
 let mapleader=","
 " set backspace
 set backspace=indent,eol,start
-function! OpenVim(mode)
-    echo "Switching to " . a:mode . "-feature gvim ..."
+function! OpenVim(mode,exec)
+    if has("gui_running") && a:exec == "vim"
+        echohl WarningMsg
+        echo "Error: Cannot switch to non-GUI mode !"
+        echohl None
+        return
+    endif
+    echo "Switching to ".a:mode." ".a:exec." ..."
     if $SHELL =~ ".*zsh$" || $SHELL =~ ".*bash$"
-        silent exe "!export VIM_MODE=" . a:mode . ";gvim ".expand('%:p')
+        silent exe "!export VIM_MODE=".a:mode."; ".a:exec." ".expand('%:p')
     elseif $SHELL =~ ".*csh$"
-        silent exe "!setenv VIM_MODE " . a:mode . ";gvim ".expand('%:p')
+        silent exe "!setenv VIM_MODE ".a:mode."; ".a:exec." ".expand('%:p')
     endif
     if len(filter(range(1,bufnr('$')),'buflisted(v:val)'))=="1"
         silent exe "quit"
@@ -25,11 +31,14 @@ function! OpenVim(mode)
     endif
 endfunction
 " open in full-feature mode
-nnoremap <silent> <leader>v :call OpenVim("full")<CR>
+nnoremap <silent> <leader>v :call OpenVim("full", "vim")<CR>
+nnoremap <silent> <leader>g :call OpenVim("full", "gvim")<CR>
 " open in light mode
-nnoremap <silent> <leader>V :call OpenVim("light")<CR>
+nnoremap <silent> <leader>V :call OpenVim("light", "vim")<CR>
+nnoremap <silent> <leader>G :call OpenVim("light", "gvim")<CR>
 " open in origin mode
-nnoremap <silent> <leader><c-v> :call OpenVim("origin")<CR>
+nnoremap <silent> <leader><c-v> :call OpenVim("origin", "vim")<CR>
+nnoremap <silent> <leader><c-g> :call OpenVim("origin", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
 "=============================================================================
