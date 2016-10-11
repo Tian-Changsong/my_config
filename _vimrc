@@ -35,13 +35,13 @@ nnoremap <silent> <leader>v :call OpenVim("full", "gvim")<CR>
 " open in light mode
 nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
 " open in origin mode
-nnoremap <silent> <leader><c-v> :call OpenVim("origin", "gvim")<CR>
+nnoremap <silent> <leader><c-v> :call OpenVim("plain", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
 "==============================================================================
 "                      full & light-feature mode config                       "
 "==============================================================================
-if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") || has("macunix")
+if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") || has("macunix")
     "==================
     "  vundle plugin  "
     "==================
