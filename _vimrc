@@ -31,19 +31,16 @@ function! OpenVim(mode,exec)
     endif
 endfunction
 " open in full-feature mode
-nnoremap <silent> <leader>v :call OpenVim("full", "vim")<CR>
-nnoremap <silent> <leader>g :call OpenVim("full", "gvim")<CR>
+nnoremap <silent> <leader>v :call OpenVim("full", "gvim")<CR>
 " open in light mode
-nnoremap <silent> <leader>V :call OpenVim("light", "vim")<CR>
-nnoremap <silent> <leader>G :call OpenVim("light", "gvim")<CR>
+nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
 " open in origin mode
-nnoremap <silent> <leader><c-v> :call OpenVim("origin", "vim")<CR>
-nnoremap <silent> <leader><c-g> :call OpenVim("origin", "gvim")<CR>
+nnoremap <silent> <leader><c-v> :call OpenVim("origin", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
-"=============================================================================
-"                      full & light-feature vim config                       "
-"=============================================================================
+"==============================================================================
+"                      full & light-feature mode config                       "
+"==============================================================================
 if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") || has("macunix")
     "==================
     "  vundle plugin  "
@@ -106,8 +103,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") |
     noremap k gk
     " Yank from the cursor to the end of the line, to be consistent with C and D.
     noremap Y y$
-    " split space seperated words to lines
-    nnoremap <leader><space> :%s/ /\r/g<CR>
     " automatically highlight word under cursor
     autocmd CursorMoved * exe exists("HlUnderCursor")?HlUnderCursor?printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'),'/\')):'match none':""
     nnoremap <silent> <leader>h :exe "let HlUnderCursor=exists(\"HlUnderCursor\")?HlUnderCursor*-1+1:1"<CR>
@@ -490,7 +485,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") |
     let g:airline#extensions#tabline#tab_nr_type = 1
     let g:airline#extensions#tabline#formatter = 'unique_tail'
     let g:airline#extensions#tabline#buffer_idx_mode = 1
-    let g:airline#extensions#tabline#excludes = ["\\[fuf\\]"]
     "map <leader>n to select buffer
     nmap <leader>1 <Plug>AirlineSelectTab1
     nmap <leader>2 <Plug>AirlineSelectTab2
@@ -565,7 +559,12 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") |
     " Set minimum syntax keyword length.
     let g:neocomplete#min_keyword_length = 3
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
+    " cache dir
+    if has("win32")
+        let g:neocomplete#data_directory=$USERPROFILE."/.cache/neocomplete"
+    else
+        let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
+    endif
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default' : '',
@@ -578,10 +577,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") |
         let g:neocomplete#keyword_patterns = {}
     endif
     let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplete#undo_completion()
-    inoremap <expr><C-l>     neocomplete#complete_common_string()
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -602,28 +597,21 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "origin" || has("win32") |
     if !exists('g:neocomplete#sources#omni#input_patterns')
         let g:neocomplete#sources#omni#input_patterns = {}
     endif
-
-    " For perlomni.vim setting.
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    if has("win32")
-        let g:neocomplete#data_directory=$USERPROFILE."/.cache/neocomplete"
-    else
-        let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
     endif
+    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
     " "jedi-vim"
     autocmd FileType python setlocal omnifunc=jedi#completions
     let g:jedi#completions_enabled = 0
     let g:jedi#auto_vim_configuration = 0
 
-    if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 else
-    "=========================================================================
-    "                             common setting                             "
-    "=========================================================================
+"=========================================================================
+"                           plain mode config                            "
+"=========================================================================
     " enable syntax highlight
     syntax on
 endif
