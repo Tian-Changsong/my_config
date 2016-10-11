@@ -30,7 +30,7 @@ function! OpenVim(mode,exec)
         silent exe "bwipeout"
     endif
 endfunction
-" open in full-feature mode
+" open in full mode
 nnoremap <silent> <leader>v :call OpenVim("full", "gvim")<CR>
 " open in light mode
 nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
@@ -38,9 +38,9 @@ nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
 nnoremap <silent> <leader><c-v> :call OpenVim("plain", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
-"==============================================================================
-"                      full & light-feature mode config                       "
-"==============================================================================
+"======================================================================
+"                      full & light mode config                       "
+"======================================================================
 if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") || has("macunix")
     "==================
     "  vundle plugin  "
