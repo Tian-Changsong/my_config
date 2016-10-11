@@ -38,9 +38,10 @@ nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
 nnoremap <silent> <leader><c-v> :call OpenVim("plain", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
-"======================================================================
-"                      full & light mode config                       "
-"======================================================================
+"=============================================================================
+"                          full & light mode config                          "
+"=============================================================================
+
 if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") || has("macunix")
     "==================
     "  vundle plugin  "
@@ -609,9 +610,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:jedi#auto_vim_configuration = 0
 
 else
-"=========================================================================
-"                           plain mode config                            "
-"=========================================================================
+"=============================================================================
+"                             plain mode config                              "
+"=============================================================================
+
     " enable syntax highlight
     syntax on
 endif
