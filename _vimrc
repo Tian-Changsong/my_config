@@ -34,7 +34,7 @@ endfunction
 nnoremap <silent> <leader>v :call OpenVim("full", "gvim")<CR>
 " open in light mode
 nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
-" open in origin mode
+" open in plain mode
 nnoremap <silent> <leader><c-v> :call OpenVim("plain", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
