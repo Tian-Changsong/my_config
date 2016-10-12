@@ -72,14 +72,14 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'davidhalter/jedi-vim'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'honza/vim-snippets' " requred by ultisnips
     if has("unix") || has("macunix")
         Plugin 'powerman/vim-plugin-viewdoc'
     endif
     Plugin 'michalbachowski/vim-wombat256mod'
     if has("unix") && $VIM_MODE == "full" || has("win32") || has("macunix")
         Plugin 'Yggdroot/indentLine'
-        Plugin 'SirVer/ultisnips'
-        Plugin 'honza/vim-snippets' " requred by ultisnips
         "Plugin 'Valloric/YouCompleteMe'
         Plugin 'scrooloose/syntastic'
     endif
