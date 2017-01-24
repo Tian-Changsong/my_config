@@ -55,6 +55,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     endif
     Plugin 'gmarik/Vundle.vim'
     Plugin 'scrooloose/nerdcommenter'
+    Plugin 'L9'
+    Plugin 'FuzzyFinder'
     Plugin 'SingleCompile'
     Plugin 'matchit.zip'
     Plugin 'othree/html5.vim'
@@ -63,8 +65,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'ShowMarks'
     Plugin 'Raimondi/delimitMate'
     Plugin 'Shougo/neocomplete.vim'
-    Plugin 'ctrlpvim/ctrlp.vim'
-    Plugin 'FelikZ/ctrlp-py-matcher'
     Plugin 'godlygeek/tabular'
     Plugin 'tpope/vim-surround'
     Plugin 'Tian-Changsong/tcl_vim_indent'
@@ -501,6 +501,68 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     nmap <F10> :SCCompileRun<CR>
     nmap <S-F10> :SCViewResult<CR>
 
+    " "fuzzyfinder"
+    let g:fuf_modesDisable = []
+    let g:fuf_mrufile_maxItem = 400
+    let g:fuf_mrucmd_maxItem = 400
+    map <leader>F :FufFileWithFullCwd<CR>
+    map <leader>f :FufFileWithCurrentBufferDir<CR>
+    map <leader>r :FufMruFile<CR>
+    map <leader>R :FufRenewCache<CR>
+    map <leader>b :FufBuffer<CR>
+    nnoremap <silent> <leader>M :call fuf#givencmd#launch('', 0, 'Choose command>', GetAllCommands())<CR>
+    nnoremap <silent> <leader>m :call fuf#givencmd#launch('', 0, 'Choose command>', g:fuf_com_list)<CR>
+    function! GetAllCommands()
+        redir => commands
+        silent command
+        redir END
+        return map((split(commands, "\n")[3:]),
+                    \      '":" . matchstr(v:val, ''^....\zs\S*'')')
+    endfunction
+    let g:fuf_com_list=[':exe "FufBuffer                       " |" 1 ',
+                \':exe "FufFileWithCurrentBufferDir     " |" 2 ',
+                \':exe "FufFileWithFullCwd              " |" 3 ',
+                \':exe "FufFile                         " |" 4 ',
+                \':exe "FufCoverageFile                 " |" 5 ',
+                \':exe "FufCoverageFileChange           " |" 6 ',
+                \':exe "FufCoverageFileRegister         " |" 7 ',
+                \':exe "FufDirWithCurrentBufferDir      " |" 8 ',
+                \':exe "FufDirWithFullCwd               " |" 9 ',
+                \':exe "FufDir                          " |" 10',
+                \':exe "FufMruFile                      " |" 11',
+                \':exe "FufMruFileInCwd                 " |" 12',
+                \':exe "FufMruCmd                       " |" 13',
+                \':exe "FufBookmarkFile                 " |" 14',
+                \':exe "FufBookmarkFileAdd              " |" 15',
+                \':exe "FufBookmarkFileAddAsSelectedText" |" 16',
+                \':exe "FufBookmarkDir                  " |" 17',
+                \':exe "FufBookmarkDirAdd               " |" 18',
+                \':exe "FufTag                          " |" 19',
+                \':exe "FufTag!                         " |" 20',
+                \':exe "FufTagWithCursorWord!           " |" 21',
+                \':exe "FufBufferTag                    " |" 22',
+                \':exe "FufBufferTag!                   " |" 23',
+                \':exe "FufBufferTagWithSelectedText!   " |" 24',
+                \':exe "FufBufferTagWithSelectedText    " |" 25',
+                \':exe "FufBufferTagWithCursorWord!     " |" 26',
+                \':exe "FufBufferTagAll                 " |" 27',
+                \':exe "FufBufferTagAll!                " |" 28',
+                \':exe "FufBufferTagAllWithSelectedText!" |" 29',
+                \':exe "FufBufferTagAllWithSelectedText " |" 30',
+                \':exe "FufBufferTagAllWithCursorWord!  " |" 31',
+                \':exe "FufTaggedFile                   " |" 32',
+                \':exe "FufTaggedFile!                  " |" 33',
+                \':exe "FufJumpList                     " |" 34',
+                \':exe "FufChangeList                   " |" 35',
+                \':exe "FufQuickfix                     " |" 36',
+                \':exe "FufLine                         " |" 37',
+                \':exe "FufHelp                         " |" 38',
+                \':exe "FufEditDataFile                 " |" 39',
+                \':exe "FufRenewCache                   " |" 40',
+                \':exe "FufDir ~/"                        |" 41',
+                \':exe "FufFile ~/"                       |" 42',
+                \]
+
     " "syntastic"
     let g:syntastic_python_checkers = ['flake8']
     let g:syntastic_python_flake8_args="--ignore=E265,F401,E501"
@@ -510,30 +572,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
     highlight SyntasticErrorSign guifg=white guibg=red
     highlight SyntasticWarningSign guifg=yellow
-
-    " "ctrlp"
-    let g:ctrlp_show_hidden=1
-    let g:ctrlp_working_path_mode = 'w'
-    let g:ctrlp_clear_cache_on_exit = 0
-    let g:ctrlp_extensions = ['dir']
-    " Set delay to prevent extra search
-    let g:ctrlp_lazy_update = 150
-    let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
-    let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-    map <silent> <leader>b :CtrlPBuffer<CR>
-    map <silent> <leader>r :CtrlPMRUFiles<CR>
-    map <silent> <leader>f :CtrlPCurFile<CR>
-    map <silent> <leader>l :CtrlPLine<CR>
-    map <silent> <leader>d :CtrlPDir<CR>
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/run_details/*
-    " If ag is available use it as filename list generator instead of 'find'
-    if executable("ag")
-        set grepprg=ag\ --nogroup\ --nocolor
-        let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
-    elseif executable("pt")
-        set grepprg=pt\ --nogroup\ --nocolor
-        let g:ctrlp_user_command = 'pt %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
-    endif
 
     " "vim-viewdoc"
     let g:viewdoc_open='new'
