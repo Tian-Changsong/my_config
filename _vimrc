@@ -57,6 +57,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'scrooloose/nerdcommenter'
     Plugin 'L9'
     Plugin 'FuzzyFinder'
+    Plugin 'ctrlpvim/ctrlp.vim'
+    Plugin 'FelikZ/ctrlp-py-matcher'
     Plugin 'SingleCompile'
     Plugin 'matchit.zip'
     Plugin 'othree/html5.vim'
@@ -500,6 +502,30 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " "SingleCompile"
     nmap <F10> :SCCompileRun<CR>
     nmap <S-F10> :SCViewResult<CR>
+
+    " "ctrlp"
+    let g:ctrlp_show_hidden=1
+    let g:ctrlp_working_path_mode = 'w'
+    let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_extensions = ['dir']
+    " Set delay to prevent extra search
+    let g:ctrlp_lazy_update = 150
+    let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
+    let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+    map <silent> <leader>b :CtrlPBuffer<CR>
+    map <silent> <leader>r :CtrlPMRUFiles<CR>
+    map <silent> <leader>f :CtrlPCurFile<CR>
+    map <silent> <leader>l :CtrlPLine<CR>
+    map <silent> <leader>d :CtrlPDir<CR>
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/run_details/*
+    " If ag is available use it as filename list generator instead of 'find'
+    if executable("ag")
+        set grepprg=ag\ --nogroup\ --nocolor
+        let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
+    elseif executable("pt")
+        set grepprg=pt\ --nogroup\ --nocolor
+        let g:ctrlp_user_command = 'pt %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
+    endif
 
     " "fuzzyfinder"
     let g:fuf_modesDisable = []
