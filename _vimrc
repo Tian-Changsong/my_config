@@ -531,6 +531,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:fuf_modesDisable = []
     let g:fuf_mrufile_maxItem = 400
     let g:fuf_mrucmd_maxItem = 400
+    let g:airline#extensions#tabline#excludes = ["\\[fuf\\]"]
     map <leader>F :FufFileWithFullCwd<CR>
     map <leader>f :FufFileWithCurrentBufferDir<CR>
     map <leader>r :FufMruFile<CR>
