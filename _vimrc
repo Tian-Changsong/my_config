@@ -67,7 +67,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'ShowMarks'
     Plugin 'Raimondi/delimitMate'
     Plugin 'Shougo/neocomplete.vim'
-    Plugin 'godlygeek/tabular'
     Plugin 'tpope/vim-surround'
     Plugin 'Tian-Changsong/tcl_vim_indent'
     Plugin 'hdima/python-syntax'
@@ -76,6 +75,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets' " requred by ultisnips
+    Plugin 'junegunn/vim-easy-align'
     if has("unix") || has("macunix")
         Plugin 'powerman/vim-plugin-viewdoc'
     endif
@@ -674,6 +674,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:jedi#completions_enabled = 0
     let g:jedi#auto_vim_configuration = 0
     let g:jedi#rename_command = ''
+
+    " "junegunn/vim-easy-align"
+    nmap ga <Plug>(EasyAlign)
+    xmap ga <Plug>(EasyAlign)
 
 else
 "=============================================================================
