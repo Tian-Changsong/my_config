@@ -281,6 +281,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     vnoremap gv y:vimgrep /<C-R>=escape(@", '\\/.*$^~[]')<CR>/ **/*
     " When you press <leader>h you can search and replace the selected text
     vnoremap <leader>h y:%s/<C-R>=escape(@", '\\/.*$^~[]')<CR>//g<Left><Left>
+    vnoremap <leader>H y:%s/\<<C-R>=escape(@", '\\/.*$^~[]')<CR>\>//g<Left><Left>
     " When you search with vimgrep, open quickfix window to display your results
     map <leader>o :botright cope<cr>
     " reformat
@@ -410,7 +411,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " complete words with dot while dictionary completion
     "set iskeyword +=.
     " set local filetype
-    "autocmd filetype conf setlocal filetype=tcl
+    autocmd filetype conf setlocal filetype=tcl
     " add scroll bar on left and bottom
     set guioptions+=Lb
     " hide menu and tool bar
@@ -675,9 +676,9 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:jedi#auto_vim_configuration = 0
     let g:jedi#rename_command = ''
 
-    " "junegunn/vim-easy-align"
-    nmap ga <Plug>(EasyAlign)
-    xmap ga <Plug>(EasyAlign)
+    " "vim-easy-align"
+    vmap <Enter> <Plug>(EasyAlign)
+    vmap ga <Plug>(EasyAlign)
 
 else
 "=============================================================================
