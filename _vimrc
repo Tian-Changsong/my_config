@@ -412,6 +412,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     "set iskeyword +=.
     " set local filetype
     autocmd filetype conf setlocal filetype=tcl
+    augroup filetypedetect
+        au BufRead,BufNewFile *.upf set filetype=tcl
+        au BufRead,BufNewFile *.cpf set filetype=tcl
+    augroup END
     " add scroll bar on left and bottom
     set guioptions+=Lb
     " hide menu and tool bar
