@@ -335,10 +335,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         elseif $VIM_MODE == "light"
             set background=light
             colorscheme PaperColor
-        else
-            set background=dark
-            colorscheme solarized
         endif
+    else
+        set background=dark
+        colorscheme solarized
     endif
     " set expandtab
     set expandtab
@@ -347,8 +347,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         set guifont=DejaVu_Sans_Mono_for_Powerline:h12
         set guifontwide=DejaVu_Sans_Mono_for_Powerline:h12
     elseif has("macunix")
-        set guifont=Monaco\ for\ Powerline:h13
-        set guifontwide=Monaco\ for\ Powerline:h13
+        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h13
+        set guifontwide=DejaVu\ Sans\ Mono\ for\ Powerline:h13
     elseif has("unix")
         set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
         "set guifont=Monaco\ for\ Powerline\ 12
@@ -421,6 +421,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " hide menu and tool bar
     set guioptions-=T
     set guioptions-=m
+    " visual select will copy selected text like in linux
+    set guioptions+=a
     " remember last cursor position
     autocmd BufReadPost *
                 \ if line("'\"") > 0 && line("'\"") <= line("$") |
