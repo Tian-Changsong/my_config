@@ -66,7 +66,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plugin 'NLKNguyen/papercolor-theme'
     Plugin 'ShowMarks'
     Plugin 'Raimondi/delimitMate'
-    Plugin 'Shougo/neocomplete.vim'
+    "Plugin 'Shougo/neocomplete.vim'
+    Plugin 'deoplete.nvim'
+    Plugin 'vim-hug-neovim-rpc'
+    Plugin 'nvim-yarp'
     Plugin 'tpope/vim-surround'
     Plugin 'Tian-Changsong/tcl_vim_indent'
     Plugin 'hdima/python-syntax'
@@ -335,6 +338,9 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         elseif $VIM_MODE == "light"
             set background=light
             colorscheme PaperColor
+        else
+            set background=dark
+            colorscheme solarized
         endif
     else
         set background=dark
@@ -405,9 +411,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " do not backup
     set nobackup
     " set dictionary
-    set dictionary+=~/.vim/dictionary/dictionary
-    autocmd filetype verilog setlocal dictionary=~/.vim/dictionary/dictionary_verilog
-    autocmd filetype python setlocal dictionary=~/.vim/dictionary/dictionary_python
+    autocmd filetype tcl setlocal dictionary=~/.vim/my_dictionary/tcl.dict
     " complete words with dot while dictionary completion
     "set iskeyword +=.
     " set local filetype
@@ -415,6 +419,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     augroup filetypedetect
         au BufRead,BufNewFile *.upf set filetype=tcl
         au BufRead,BufNewFile *.cpf set filetype=tcl
+        au BufRead,BufNewFile *.lib set filetype=c | setlocal iskeyword=@,48-57,_,192-255
     augroup END
     " add scroll bar on left and bottom
     set guioptions+=Lb
@@ -437,7 +442,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     iab xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")
     " window size when using gvim
     if has("gui_running")
-        set lines=800 columns=1600
+        set lines=100 columns=150
     endif
     " format programs
     au Filetype python set formatprg=autopep8\ -
@@ -513,6 +518,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " "ctrlp"
     let g:ctrlp_show_hidden=1
     let g:ctrlp_working_path_mode = 'w'
+    let g:ctrlp_follow_symlinks = 1
     let g:ctrlp_clear_cache_on_exit = 0
     let g:ctrlp_extensions = ['dir']
     " Set delay to prevent extra search
@@ -526,13 +532,13 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     map <silent> <leader>d :CtrlPDir<CR>
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/run_details/*
     " If ag is available use it as filename list generator instead of 'find'
-    if executable("ag")
-        set grepprg=ag\ --nogroup\ --nocolor
-        let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
-    elseif executable("pt")
-        set grepprg=pt\ --nogroup\ --nocolor
-        let g:ctrlp_user_command = 'pt %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
-    endif
+    "if executable("ag")
+        "set grepprg=ag\ --nogroup\ --nocolor
+        "let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden -g ""'
+    "elseif executable("pt")
+        "set grepprg=pt\ --nogroup\ --nocolor
+        "let g:ctrlp_user_command = 'pt %s -i --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''node_modules'' --hidden --follow -g ""'
+    "endif
 
     " "fuzzyfinder"
     let g:fuf_modesDisable = []
@@ -622,49 +628,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:indentLine_enabled=0
     nnoremap <leader>i :IndentLinesToggle<CR>
 
-    " "neocomplete"
-    " Use neocomplete.
-    let g:neocomplete#enable_at_startup = 1
-    " Use smartcase.
-    let g:neocomplete#enable_smart_case = 1
-    " auto close preview
-    let g:neocomplete#enable_auto_close_preview = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplete#min_keyword_length = 3
-    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-    " cache dir
-    if has("win32")
-        let g:neocomplete#data_directory=$USERPROFILE."/.cache/neocomplete"
-    else
-        let g:neocomplete#data_directory=$HOME."/.cache/neocomplete"
-    endif
-    " Define dictionary.
-    let g:neocomplete#sources#dictionary#dictionaries = {
-                \ 'default' : '',
-                \ 'vimshell' : $HOME.'/.vimshell_hist',
-                \ 'scheme' : $HOME.'/.gosh_completions'
-                \ }
-
-    " Define keyword.
-    if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-    endif
-    let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-    " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
-        return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-        " For no inserting <CR> key.
-        "return pumvisible() ? "\<C-y>" : "\<CR>"
-    endfunction
-
-    " Enable omni completion.
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
     " Enable heavy omni completion.
     if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -683,9 +646,18 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:jedi#rename_command = ''
 
     " "vim-easy-align"
-    vmap <Enter> <Plug>(EasyAlign)
     vmap ga <Plug>(EasyAlign)
+    vmap <Enter> <Plug>(EasyAlign)
 
+    " "deoplete"
+    " Enable deoplete when InsertEnter.
+    let g:deoplete#enable_at_startup = 0
+    autocmd InsertEnter * call deoplete#enable()
+    if !exists('g:deoplete#omni_patterns')
+        let g:deoplete#omni_patterns = {}
+    endif
+    let g:deoplete#omni_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    call deoplete#custom#source('ultisnips', 'rank', 1000)
 else
 "=============================================================================
 "                             plain mode config                              "
