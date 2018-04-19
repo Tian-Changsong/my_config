@@ -562,11 +562,25 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     endif
     " "LeaderF"
     let g:Lf_StlSeparator = { 'left': '', 'right': '' }
-    "let g:Lf_ExternalCommand = 'rg "%s" --no-messages --files --hidden'
-    if has("unix)
-        let g:Lf_ExternalCommand = 'find "%s" -type f'
+    let g:Lf_WorkingDirectoryMode='F'
+    let g:Lf_FollowLinks=1
+    if has("unix")
+        "let g:Lf_ExternalCommand = 'find "%s" -type f'
+        let g:Lf_ExternalCommand = 'rg "%s" --no-messages --files --hidden'
     endif
     map <leader>r :LeaderfMru<CR>
+    map <leader>F :LeaderfFile<CR>
+    function! LeaderfCurrentDir()
+        let g:Lf_UseCache=0
+        let g:Lf_UseMemoryCache=0
+        let s:Lf_ExternalCommand= g:Lf_ExternalCommand
+        let g:Lf_ExternalCommand='ls -AtF "%s"'.'/'.expand("%:~:.:h").'|grep -v /'
+        execute 'LeaderfFile'
+        let g:Lf_ExternalCommand=s:Lf_ExternalCommand
+        let g:Lf_UseCache=1
+    endfunction
+    map <leader>f :call LeaderfCurrentDir()<CR>
+
 else
 "=============================================================================
 "                             plain mode config                              "
