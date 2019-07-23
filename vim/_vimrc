@@ -45,7 +45,9 @@ endif
 
 if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") || has("macunix")
     " deoplete | ncm2 | coc
-    let g:complete_plugin = 'ncm2'
+    let g:complete_plugin = 'deoplete'
+    " LanguageClient-neovim | vim-lsp
+    let g:lsp = "LanguageClient-neovim"
     "==================
     "  vundle plugin  "
     "==================
@@ -60,33 +62,37 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'altercation/vim-colors-solarized'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'Raimondi/delimitMate'
-    Plug 'prabirshrestha/vim-lsp'
-    Plug 'prabirshrestha/async.vim'
+    "Plug 'w0rp/ale'
+    "if g:complete_plugin == 'deoplete' || g:complete_plugin == 'ncm2'
+        Plug 'roxma/vim-hug-neovim-rpc'
+        Plug 'roxma/nvim-yarp'
+    "endif
+    if g:lsp == 'LanguageClient-neovim'
+        Plug 'autozimu/LanguageClient-neovim', {
+                    \ 'branch': 'next',
+                    \ 'do': 'bash install.sh',
+                    \ }
+    elseif g:lsp == 'vim-lsp'
+        Plug 'prabirshrestha/vim-lsp'
+        Plug 'prabirshrestha/async.vim'
+    endif
     if g:complete_plugin == 'coc'
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
     elseif g:complete_plugin == 'deoplete'
         Plug 'Shougo/deoplete.nvim'
-        Plug 'Shougo/deoplete-vim-lsp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-        Plug 'roxma/nvim-yarp'
+        Plug 'deoplete-plugins/deoplete-dictionary'
     elseif g:complete_plugin == "ncm2"
         Plug 'ncm2/ncm2'
         Plug 'ncm2/ncm2-bufword'
         Plug 'ncm2/ncm2-path'
         Plug 'ncm2/ncm2-ultisnips'
         Plug 'yuki-ycino/ncm2-dictionary'
-        Plug 'ncm2/ncm2-vim-lsp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-        Plug 'roxma/nvim-yarp'
+            Plug 'ncm2/ncm2-vim-lsp'
+        if g:lsp == 'vim-lsp'
+        endif
     endif
     
     Plug 'Tian-Changsong/tcl_vim_indent',{'for': 'tcl'}
-    if g:complete_plugin != 'coc'
-        "Plug 'autozimu/LanguageClient-neovim', {
-                    "\ 'branch': 'next',
-                    "\ 'do': 'bash install.sh',
-                    "\ }
-    endif
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'SirVer/ultisnips'
@@ -586,7 +592,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     map <leader>d :call LeaderfDirCurrentDir()<CR>
 
     " "LanguageClient-neovim"
-    if g:complete_plugin != 'coc'
+    if g:lsp == 'LanguageClient-neovim'
         let g:LanguageClient_serverCommands = {
                     \ 'python': ['pyls'],
                     \ }
@@ -598,20 +604,30 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         "" IMPORTANT: :help Ncm2PopupOpen for more information
         set completeopt=noinsert,menuone,noselect
         let g:ncm2#complete_length= [[1,2],[7,2]]
+        "let g:ncm2_bufword#source = extend(get(g:, 'ncm2_bufword#source', {}), {
+                    "\ 'name': 'bufword',
+                    "\ 'ready': 0,
+                    "\ 'priority': 7,
+                    "\ 'mark': 'b',
+                    "\ 'on_complete': 'ncm2_bufword#on_complete',
+                    "\ 'on_warmup': 'ncm2_bufword#on_warmup',
+                    "\ }, 'keep')
     endif
 
     " "vim-lsp"
-    if executable('pyls')
-        " pip install python-language-server
-        au User lsp_setup call lsp#register_server({
-                    \ 'name': 'pyls',
-                    \ 'cmd': {server_info->['pyls']},
-                    \ 'whitelist': ['python'],
-                    \ })
+    if g:lsp == 'vim-lsp'
+        if executable('pyls')
+            " pip install python-language-server
+            au User lsp_setup call lsp#register_server({
+                        \ 'name': 'pyls',
+                        \ 'cmd': {server_info->['pyls']},
+                        \ 'whitelist': ['python'],
+                        \ })
+        endif
+        " set to 0 if use ale to show marks
+        let g:lsp_diagnostics_enabled=1
+        let g:lsp_diagnostics_echo_cursor = 1
     endif
-    " set to 0 if use ale to show marks
-    let g:lsp_diagnostics_enabled=1
-    let g:lsp_diagnostics_echo_cursor = 1
 else
 "=============================================================================
 "                             plain mode config                              "
