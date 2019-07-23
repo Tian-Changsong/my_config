@@ -36,6 +36,9 @@ nnoremap <silent> <leader>V :call OpenVim("light", "gvim")<CR>
 nnoremap <silent> <leader><c-v> :call OpenVim("plain", "gvim")<CR>
 " force quit
 nnoremap <leader>q :q!<CR>
+if has("win32")
+    let $HOME='E:\Documents'
+endif
 "=============================================================================
 "                          full & light mode config                          "
 "=============================================================================
@@ -57,7 +60,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'altercation/vim-colors-solarized'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'Raimondi/delimitMate'
-    Plug 'w0rp/ale'
     Plug 'prabirshrestha/vim-lsp'
     Plug 'prabirshrestha/async.vim'
     if g:complete_plugin == 'coc'
@@ -291,6 +293,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " When you press <leader>h you can search and replace the selected text
     vnoremap <leader>h y:%s/<C-R>=escape(@", '\\/.*$^~[]')<CR>//g<Left><Left>
     vnoremap <leader>H y:%s/\<<C-R>=escape(@", '\\/.*$^~[]')<CR>\>//g<Left><Left>
+    " <leader><space> to change space to carrige
+    map <leader><space> :%s/ /\r/g<CR>
     " reformat
     noremap <F9> gggqG
     "================
@@ -357,7 +361,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         set guifontwide=Monaco\ for\ Powerline:h13
     elseif has("unix")
         set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
-        set guifontwide=UbuntuMono\ Nerd\ Font\ Mono\ 12
+        "set guifont=Monaco\ for\ Powerline\ 12
+        set guifontwide=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
     endif
     " set encoding
     set fileencodings=utf-8,gb18030,gbk,gb2312,cp936,ucs-bom
@@ -503,7 +508,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:viewdoc_only=1
     let g:viewdoc_man_cmd="man -a"
     function s:ViewDoc_tcl(topic, ...)
-        return { 'cmd': printf('man -M /home/changsongtian/programs/tcl/man %s | col -b', shellescape(a:topic,1)),
+        return { 'cmd': printf('man -M $HOME/programs/ActiveTcl8.6.4/man:$HOME/programs/manpage/innovus/man %s | col -b', shellescape(a:topic,1)),
             \ 'ft': 'tcl',
             \ }
     endfunction
@@ -524,25 +529,25 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         autocmd InsertEnter * call deoplete#enable()
         autocmd InsertLeave * silent! pclose!
         call deoplete#custom#source('ultisnips', 'rank', 1000)
-        if has("win32")
-            let g:python3_host_prog="D:/Python36/python.exe"
-        else
-            "if echo exepath('python3') is not empty, no need to set this variable
-            "let g:python3_host_prog="D:/Python36/python.exe"
-        endif
     endif
 
+    " "nvim-yarp"
+    if has("win32")
+        let g:python3_host_prog='C:/Program Files/Python37/python.exe'
+    else
+        "if echo exepath('python3') is not empty, no need to set this variable
+        "let g:python3_host_prog="D:/Python36/python.exe"
+    endif
 
     " "LeaderF"
     let g:Lf_StlSeparator = { 'left': '', 'right': '' }
     let g:Lf_WorkingDirectoryMode='F'
     let g:Lf_FollowLinks=1
+    let g:Lf_MruMaxFiles=100
     " use ripgrep, or platinum searcher
-    if has("unix") && executable('rg')
-        "let g:Lf_ExternalCommand = 'find "%s" -type f'
-        let g:Lf_ExternalCommand = 'rg "%s" --no-messages --files --hidden'
-    else
+    if has("unix") 
         let g:Lf_ExternalCommand = 'find "%s" -type f'
+        "let g:Lf_ExternalCommand = 'rg "%s" --no-messages --files --hidden'
     endif
     map <leader>r :LeaderfMru<CR>
     map <leader>F :LeaderfFile<CR>
@@ -561,8 +566,24 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         let g:Lf_UseCache=1
         let g:Lf_WorkingDirectoryMode='F'
     endfunction
-    map <leader>f :call LeaderfCurrentDir()<CR>
+    function! LeaderfDirCurrentDir()
+        let g:Lf_UseCache=0
+        let g:Lf_UseMemoryCache=0
+        let s:Lf_ExternalCommand= g:Lf_ExternalCommand
+        let g:Lf_WorkingDirectoryMode='c'
+        if expand("%:~:.:h") == ""
+            let g:Lf_ExternalCommand='echo "%s" ; find -L . -maxdepth 1 -type d'
+        else 
+            let g:Lf_ExternalCommand='echo "%s" ; find -L '.expand("%:~:.:h").' -maxdepth 1 -type d'
+        endif
+        execute 'LeaderfFile'
+        let g:Lf_ExternalCommand=s:Lf_ExternalCommand
+        let g:Lf_UseCache=1
+        let g:Lf_WorkingDirectoryMode='F'
+    endfunction
 
+    map <leader>f :call LeaderfCurrentDir()<CR>
+    map <leader>d :call LeaderfDirCurrentDir()<CR>
 
     " "LanguageClient-neovim"
     if g:complete_plugin != 'coc'
@@ -576,6 +597,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         autocmd InsertEnter * call ncm2#enable_for_buffer()
         "" IMPORTANT: :help Ncm2PopupOpen for more information
         set completeopt=noinsert,menuone,noselect
+        let g:ncm2#complete_length= [[1,2],[7,2]]
     endif
 
     " "vim-lsp"
@@ -587,8 +609,9 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
                     \ 'whitelist': ['python'],
                     \ })
     endif
-    " use ale to show marks
-    let g:lsp_diagnostics_enabled=0
+    " set to 0 if use ale to show marks
+    let g:lsp_diagnostics_enabled=1
+    let g:lsp_diagnostics_echo_cursor = 1
 else
 "=============================================================================
 "                             plain mode config                              "
