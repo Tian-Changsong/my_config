@@ -60,7 +60,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'Raimondi/delimitMate'
     Plug 'roxma/vim-hug-neovim-rpc'
     Plug 'roxma/nvim-yarp'
-    Plug 'neomake/neomake',{'for': ['tcl', 'python']}
+    Plug 'w0rp/ale'
     Plug 'Shougo/deoplete.nvim'
     Plug 'deoplete-plugins/deoplete-dictionary'
     Plug 'deoplete-plugins/deoplete-jedi'
@@ -562,9 +562,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
 
     map <leader>f :call LeaderfCurrentDir()<CR>
     map <leader>d :call LeaderfDirCurrentDir()<CR>
-
-    " "neomake"
-    autocmd filetype python call neomake#configure#automake('nrwi', 500)
 else
 "=============================================================================
 "                             plain mode config                              "
