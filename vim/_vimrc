@@ -58,15 +58,13 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'altercation/vim-colors-solarized'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'Raimondi/delimitMate'
-    Plug 'w0rp/ale'
     Plug 'roxma/vim-hug-neovim-rpc'
     Plug 'roxma/nvim-yarp'
-    Plug 'autozimu/LanguageClient-neovim', {
-                \ 'branch': 'next',
-                \ 'do': 'bash install.sh',
-                \ }
+    Plug 'neomake/neomake',{'for': ['tcl', 'python']}
     Plug 'Shougo/deoplete.nvim'
     Plug 'deoplete-plugins/deoplete-dictionary'
+    Plug 'deoplete-plugins/deoplete-jedi'
+    "Plug 'davidhalter/jedi-vim'
     Plug 'Tian-Changsong/tcl_vim_indent',{'for': 'tcl'}
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
@@ -566,14 +564,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     map <leader>f :call LeaderfCurrentDir()<CR>
     map <leader>d :call LeaderfDirCurrentDir()<CR>
 
-    " "LanguageClient-neovim"
-    let g:LanguageClient_serverCommands = {
-                \ 'python': ['pyls'],
-                \ }
-    " use ale's signs
-    let g:LanguageClient_diagnosticsSignsMax=0
-    " use ale's statusline
-    let g:airline#extensions#languageclient#enabled = 0
+    " "neomake"
+    autocmd filetype python call neomake#configure#automake('nrwi', 500)
 else
 "=============================================================================
 "                             plain mode config                              "
