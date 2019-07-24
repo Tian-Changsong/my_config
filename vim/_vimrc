@@ -58,7 +58,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'altercation/vim-colors-solarized'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'Raimondi/delimitMate'
-    "Plug 'w0rp/ale'
+    Plug 'w0rp/ale'
     Plug 'roxma/vim-hug-neovim-rpc'
     Plug 'roxma/nvim-yarp'
     Plug 'autozimu/LanguageClient-neovim', {
@@ -116,6 +116,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
         elseif a:mode=="visual"
             let s:filename=getreg('*',1)
         endif
+        echo
         if !empty(glob(s:filename))
             echohl MoreMsg
             echo "Exists !(File: ".s:filename.")"
@@ -411,6 +412,8 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     " hide menu and tool bar
     set guioptions -=T
     set guioptions -=m
+    " autocopy in visual mode
+    set guioptions +=a
     " remember last cursor position
     autocmd BufReadPost *
                 \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -456,8 +459,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     endif
 
     " "airline"
-    set laststatus=2
-    set t_Co=256
     let g:airline#extensions#whitespace#enabled = 0
     if !exists('g:airline_symbols')
         let g:airline_symbols={}
@@ -479,6 +480,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     nmap <leader>7 <Plug>AirlineSelectTab7
     nmap <leader>8 <Plug>AirlineSelectTab8
     nmap <leader>9 <Plug>AirlineSelectTab9
+
 
     " "SingleCompile"
     nmap <F10> :SCCompileRun<CR>
@@ -568,6 +570,10 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['pyls'],
                 \ }
+    " use ale's signs
+    let g:LanguageClient_diagnosticsSignsMax=0
+    " use ale's statusline
+    let g:airline#extensions#languageclient#enabled = 0
 else
 "=============================================================================
 "                             plain mode config                              "
