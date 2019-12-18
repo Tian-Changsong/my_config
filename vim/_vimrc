@@ -60,7 +60,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'Raimondi/delimitMate'
     Plug 'roxma/vim-hug-neovim-rpc'
     Plug 'roxma/nvim-yarp'
-    Plug 'w0rp/ale'
+    Plug 'w0rp/ale',{'for': 'python'}
     Plug 'Shougo/deoplete.nvim'
     Plug 'deoplete-plugins/deoplete-dictionary'
     Plug 'deoplete-plugins/deoplete-jedi'
@@ -228,6 +228,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
                 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
             endif
             set linespace=0
+            set nowrap
         elseif a:mode=="enlarge"
             if has("win32")
                 set guifont=DejaVu_Sans_Mono_for_Powerline:h12
@@ -249,7 +250,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
             endfunction
 
             nnoremap <F11> :call ToggleFullScreen()<CR>
-            nnoremap <silent> <F4> :call MaximizeWin()<CR>:call ToggleFont("shrink")<CR>
+            nnoremap <silent> <F4> :call ToggleFont("shrink")<CR>:call MaximizeWin()<CR>
             nnoremap <silent> <c-F4> :call ToggleFont("enlarge")<CR>
         else
             nnoremap <silent> <F4> :call ToggleFont("shrink")<CR>
