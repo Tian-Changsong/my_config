@@ -44,9 +44,9 @@ endif
 "=============================================================================
 
 if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") || has("macunix")
-    "==================
-    "  vundle plugin  "
-    "==================
+    "====================
+    "  vim-plug plugin  "
+    "====================
     if has("win32")
         call plug#begin($vim."/vimfiles/bundle")
     else
@@ -58,13 +58,7 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     Plug 'altercation/vim-colors-solarized'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'Raimondi/delimitMate'
-    Plug 'roxma/vim-hug-neovim-rpc'
-    Plug 'roxma/nvim-yarp'
-    Plug 'w0rp/ale',{'for': 'python'}
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'deoplete-plugins/deoplete-dictionary'
-    Plug 'deoplete-plugins/deoplete-jedi'
-    "Plug 'davidhalter/jedi-vim'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'Tian-Changsong/tcl_vim_indent',{'for': 'tcl'}
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
@@ -503,21 +497,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     vmap ga <Plug>(EasyAlign)
     vmap <Enter> <Plug>(EasyAlign)
 
-    " "deoplete"
-    " Enable deoplete when InsertEnter.
-    let g:deoplete#enable_at_startup = 0
-    autocmd InsertEnter * call deoplete#enable()
-    autocmd InsertLeave * silent! pclose!
-    call deoplete#custom#source('ultisnips', 'rank', 1000)
-
-    " "nvim-yarp"
-    if has("win32")
-        let g:python3_host_prog='C:/Program Files/Python37/python.exe'
-    else
-        "if echo exepath('python3') is not empty, no need to set this variable
-        "let g:python3_host_prog="D:/Python36/python.exe"
-    endif
-
     " "LeaderF"
     let g:Lf_StlSeparator = { 'left': '', 'right': '' }
     let g:Lf_WorkingDirectoryMode='F'
@@ -564,8 +543,6 @@ if has("unix") && exists("$VIM_MODE") && $VIM_MODE != "plain" || has("win32") ||
     map <leader>f :call LeaderfCurrentDir()<CR>
     map <leader>d :call LeaderfDirCurrentDir()<CR>
 
-    " "ale"
-    let g:ale_linters_ignore = {'python': ['pylint']}
 else
 "=============================================================================
 "                             plain mode config                              "
